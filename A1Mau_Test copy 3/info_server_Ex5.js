@@ -3,13 +3,13 @@ var app = express();
 var myParser = require("body-parser");
 
 var products = require('./product_data.json');
-products.forEach( (prod,i) => {prod.total_sold = 0}); 
+products.forEach( (prod,i) => {prod.total_sold = 0});
 
 app.get("/product_data.js", function (request, response, next) {
     response.type('.js');
     var products_str = `var products = ${JSON.stringify(products)};`;
     response.send(products_str);
-});
+ });
 
 function isNonNegativeInteger(inputString, returnErrors = false) {
     // Validate that an input value is a non-negative integer
@@ -23,41 +23,42 @@ function isNonNegativeInteger(inputString, returnErrors = false) {
     else {
         if (inputString < 0) errors.push('Negative value!'); // Check if it is non-negative
         if (parseInt(inputString) != inputString) errors.push('Not an integer!'); // Check that it is an integer
+        if (inputString = 0) errors.push('Please enter a value greater than zero!')
     }
     return returnErrors ? errors : (errors.length == 0);
 }
 
-// Route to handle any request; also calls next
+
 app.all('*', function (request, response, next) {
     console.log(request.method + ' to path: ' + request.path);
     next();
 });
 
-// Route to handle just the path /test
 app.get('/test', function (request, response, next) {
     response.send('Got a GET request to path: test');
 });
 
-app.use(myParser.urlencoded({ extended: true }));
+// why do you need multiple paths? - to execute multiple rules?
 
-// Rule to handle process_form request from order_page.html
+app.use(myParser.urlencoded({ extended: true}));
+
 app.post("/process_form", function (request, response) {
-    let POST = request.body;
+    let POST = request.body; 
     let brand = products[0]['brand'];
     let brand_price = products[0]['price'];
 
-    if (typeof POST['quantity_textbox'] != 'undefined') {
-        let quantity = POST['quantity_textbox'];
+    if (typeof POST ['quantity_textbox'] != 'undefined')
+    {
+        let quantity = POST ['quantity_textbox'];
         if (isNonNegativeInteger(quantity)) {
             products[0]['total_sold'] += Number(quantity);
             response.redirect('receipt.html?quantity=' + quantity);
         } else {
-            response.redirect('order_page.html?error=Invalid%20Quantity&quantity_textbox=' + quantity);
+            response.send (`${quantity} is not a valid quantity`);
         }
     }
-});
+ });
 
-// Handle request for any static file
 app.use(express.static('./public'));
 
-app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here
+app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here to do a callback 33141448
