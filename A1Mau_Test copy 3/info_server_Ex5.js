@@ -23,7 +23,6 @@ function isNonNegativeInteger(inputString, returnErrors = false) {
     else {
         if (inputString < 0) errors.push('Negative value!'); // Check if it is non-negative
         if (parseInt(inputString) != inputString) errors.push('Not an integer!'); // Check that it is an integer
-        if (inputString = 0) errors.push('Please enter a value greater than zero!')
     }
     return returnErrors ? errors : (errors.length == 0);
 }
@@ -47,14 +46,13 @@ app.post("/process_form", function (request, response) {
     let brand = products[0]['brand'];
     let brand_price = products[0]['price'];
 
-    if (typeof POST ['quantity_textbox'] != 'undefined')
-    {
+    if (typeof POST ['quantity_textbox'] != 'undefined'){
         let quantity = POST ['quantity_textbox'];
         if (isNonNegativeInteger(quantity)) {
             products[0]['total_sold'] += Number(quantity);
             response.redirect('receipt.html?quantity=' + quantity);
         } else {
-            response.send (`${quantity} is not a valid quantity`);
+            response.redirect('order_page.html?error=Invalid%20Quantity&quantity_textbox=' + quantity);
         }
     }
  });
