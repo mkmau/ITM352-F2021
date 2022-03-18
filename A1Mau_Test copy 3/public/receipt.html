@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Receipt</title>
 </head>
 
 <body>
@@ -36,7 +36,7 @@
         if (typeof quantity != 'undefined') {
             let quantity = POST ['quantity_textbox'];
             if (isNonNegativeInteger(quantity)) {
-                document.write(`<H2>Thank you for ordering ${quantity} ${brand}! Your total is \$${quantity * brand_price}.</H2>`);
+                document.write('<H2>Thank you for ordering ${quantity} ${brand}! Your total is \$${quantity * brand_price}.</H2>');
             } else {
                 document.write(`<B>${quantity} is not a valid quantity!</B>`);
             }

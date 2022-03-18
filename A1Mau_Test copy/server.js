@@ -8,9 +8,7 @@ var products_array = data.products; //set variable 'products_array' to the produ
 const queryString = require('querystring'); //read variable 'queryString' as the loaded query-string module
 var express = require('express'); //load and cache express module
 var app = express(); //set module to variable 'app'
-
-// remove later//  //Alyssa Mencel's code
-var myParser = require("body-parser"); //load and cache body parser module
+var myParser = require("body-parser"); //load and cache body parser module - Lab13
 // const { getUnpackedSettings } = require('http2'); - COMMENTED OUT
 
 app.all('*', function (request, response, next) { //for all request methods...
@@ -97,6 +95,7 @@ function isNonNegInt(q, returnErrors = false) {
 
 // taken from assignment 1 examples
 app.use(express.static('./public')); // root in the 'public' directory so that express will serve up files from here
+
 app.listen(8080, () => console.log(`listening on port 8080`)); //run the server on port 8080 and show it in the console
 
            
