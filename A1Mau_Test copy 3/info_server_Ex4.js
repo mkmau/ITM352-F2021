@@ -2,11 +2,12 @@ var express = require('express');
 var app = express();
 var myParser = require("body-parser");
 
-var products = require(__dirname + '/product_data.json');
+var products = require('./product_data.json');
+products.forEach( (prod,i) => {prod.total_sold = 0});
 
 app.get("/product_data.js", function (request, response, next) {
-    response.type('.js'); // client gets JS file back
-    var products_str = `var products = ${JSON.stringify(products)};`; // turn HTML into string or plain text
+    response.type('.js');
+    var products_str = `var products = ${JSON.stringify(products)};`;
     response.send(products_str);
  });
 
@@ -38,6 +39,7 @@ app.get('/test', function (request, response, next) {
 });
 
 // why do you need multiple paths? - to execute multiple rules?
+// 56 min of lab 13 3rd video how do you update the file itself? Thats the key to A1
 
 app.use(myParser.urlencoded({ extended: true}));
 
@@ -50,7 +52,8 @@ app.post("/process_form", function (request, response) {
     {
         let quantity = POST ['quantity_textbox'];
         if (isNonNegativeInteger(quantity)) {
-            response.send(`Thank you for ordering ${quantity} ${brand} things! Your total is `);
+            products[0]['total_sold'] += Number(quantity);
+            response.send(`<h2>Thank you for purchasing ${quantity} ${brand}. Your total is \$${quantity * brand_price}!</h2>`);
         } else {
             response.send (`${quantity} is not a valid quantity`);
         }
