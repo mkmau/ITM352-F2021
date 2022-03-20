@@ -1,0 +1,72 @@
+<!--Alyssa Mencel's Registration Page-->
+<!--used help from lab 14 and ww3schools.com-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        let params = (new URL(document.location)).searchParams;
+
+        window.onload = function () { // creating the function for window.onload
+            //if there are errors it tells the user 
+            if (params.has('errors')) {
+
+                console.log("invalid");
+                alert('Fix the following errors: \n' + params.get('errors'));
+            }
+        }    
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./stylesheets/navbar.css">
+    <link rel="stylesheet" href="./stylesheets/loginregister.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Oswald">
+    <title>Register an Account!</title>
+    <!--this sets the background image and helps style the page-->
+    <style>
+       body {
+        background-image: url(./images/palmtree.jpg);
+       };
+    </style>
+</head>
+
+<body>
+    <!--create navbar, used code from w3schools.com-->
+    <ul>
+        <li style="float:left"><a href="./index.html">Sustainable Outfitters</a></li>
+        <li><a href="./invoice.html">Shopping Cart</a></li>
+        <li><a href="./products_display.html">Products</a></li>
+        <li><a class="active" href="./register.html">Register</a></li>
+      </ul>
+    <h1><mark>  Register an account with Sustainable Outfitters before your purchase!  
+    </mark>
+    </h1>
+    <!--creates the form for users to register, used code from w3schools.com-->
+    <div id='account'>
+        <form method="POST" action="process_register" name="Register">
+            <input type="text" name="fullname" size="40" pattern="[a-zA-Z]+[ ]+[a-zA-Z]+"
+                placeholder="Enter First & Last Name"><br />
+            <input type="text" name="username" size="40" pattern=".[a-z0-9]{3,10}" required
+                title="Minimum 4 Characters, Maximum 10 Characters, Numbers/Letters Only"
+                placeholder="Enter Username"><br />
+            <input type="email" name="email" size="40" placeholder="Enter Email"
+                pattern="[a-z0-9._]+@[a-z0-9]+\.[a-z]{3,}$" required title="Please enter valid email."><br />
+            <input type="password" id="password" name="password" size="40" pattern=".{6,}" required
+                title="6 Characters Minimum" placeholder="Enter Password"><br />
+            <input type="password" id="repeat_password" name="repeat_password" size="40" pattern=".{6,}" required
+                title="6 Characters Minimum" placeholder="Repeat Password"><br />
+
+            <input type="submit" value="Register" class="btn">
+        </form>
+        <script>
+            Register.action += document.location.search; //saves the query string from the products page for the invoice
+        </script>
+    </div>
+    <!--this is the button that will take users to login if they already have an account-->
+    <input type="button" name="olduser" value="Returning Users Click Here!" class="btn2"
+        onclick="window.location='./login.html' + document.location.search;">
+</body>
+
+</html>

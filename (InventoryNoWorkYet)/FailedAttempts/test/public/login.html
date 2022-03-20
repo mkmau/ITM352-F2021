@@ -1,0 +1,62 @@
+<!--Alyssa Mencel's Login Page-->
+<!--used help from lab 14 and ww3schools.com-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <script>
+        //alerts th euser if they have an error (in both the username and password)
+        let params = (new URL(document.location)).searchParams;
+
+        window.onload = function () {
+            if (params.has('LogError')) {
+                alert('Invalid Username or Passowrd');
+            }
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./stylesheets/navbar.css">
+    <link rel="stylesheet" href="./stylesheets/loginregister.css">
+    <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Oswald">
+    <title>Login!</title>
+    <style>
+    body {
+        background-image: url(./images/palmtree.jpg);
+       };
+    </style>
+</head>
+
+<body> 
+    <!--create navbar, used code from w3schools.com-->
+    <ul>
+        <li style="float:left"><a href="./index.html">Sustainable Outfitters</a></li>
+        <li><a href="./invoice.html">Shopping Cart</a></li>
+        <li><a href="./products_display.html">Products</a></li>
+        <li><a href="./register.html">Register</a></li>
+        <li><a class="active" href="./login.html">Login</a></li>
+      </ul>
+
+    <h1><mark>Sustainable Outfitter's User Log In Page!</mark></h1>
+    <p><mark>To buy our products you must<br> login or register as a member</mark></p>
+    <form name="login" action="process_login" method="POST">
+        <div class="container"><br>
+            <input type="text" name="username" id="username" size="40" placeholder="Enter Username" required><br>
+            <input type="password" name="password" size="40" placeholder="Enter Password" onkeyup="" required><br> 
+            
+            <input type="submit" value="Login" name="login" class='btn'>
+            
+            
+        </div>
+    </form>
+    <script>
+        
+       login.action += document.location.search; //saves the query string from the products page for the invoice 
+    </script>
+    <input type="button" name="newuser" value="New User Register Here!" class="btn2"
+        onclick="window.location='./register.html' + document.location.search;">
+
+</html>
