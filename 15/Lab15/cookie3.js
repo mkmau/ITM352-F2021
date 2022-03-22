@@ -1,0 +1,190 @@
+/*
+Purpose: 
+Date:
+Author:
+*/
+
+// Load required packages
+var fs = require('fs');
+var express = require('express');
+var app = express();
+var myParser = require("body-parser");
+var filename = "./user_data.json";
+var queryString = require("query-string");
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+const { nextTick } = require('process');
+
+app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
+app.use(cookieParser());
+app.use(myParser.urlencoded({ extended: true }));
+app.use(express.static('./public'));
+
+if (fs.existsSync(filename)) {
+    data = fs.readFileSync(filename, 'utf-8');
+
+    user_data = JSON.parse(data);
+    console.log("User_data=", user_data);
+
+    fileStats = fs.statSync(filename);
+    console.log("File " + filename + " has " + fileStats.size + " characters");
+} else {
+    console.log("Enter the correct filename bozo!");
+}
+
+app.get("/", function (request, response){
+    if ( request.session.page_views) {
+        request.session.page_views++;
+        response.send("Welcome back. This is visit #" + request.session.page_views);
+    } else {
+        request.session.page_views = 1;
+        response.send("Welcome for the first time")
+    }  
+}
+) // use a variable page views and if it exists then increment by one - if it doesnt then create it
+
+app.get("/set_cookie", function (request, response) {
+    my_name = "Rick Kazman";
+
+    response.cookie("My Name", my_name, {maxAge: 30*60*1000}).send("Cookie sent");
+}
+);
+
+app.get("/get_cookie", function (request, response) {
+    //console.log("Cookies=" + request.cookies);
+    my_cookie_name = request.cookies["My Name"];
+    response.send("User " + my_cookie_name + " recognized");
+}
+);
+
+app.get("/set_session", function (request, response, next) {
+    response.send(`Welcome, your session ID is ${request.session.id}`); // on successful login  this is sent
+    next();
+}
+);
+
+app.get("/use_session", function (request, response) {
+    request.session.id
+    response.send("Your session id is " + request.session.id); // session ID is pulled
+    request.session.destroy(); // everytime use_session is called the old session is destroyed
+}
+);
+
+app.get("/fav_color", function (request, response) {
+    // Give a simple login form
+
+    str = `<body>
+Last login: ${login_time} by ${my_cookie_name};
+<form action="/fav_color" method="POST">
+<input type="text" name="color" size="40" placeholder="enter favorite colot" ><br />
+<input type="submit" value="Submit" id="submit">
+</form>
+</body>
+    `;
+    response.send(str);
+});
+
+app.post("/fav_color", function (request, response) {
+    var POST = request.body;
+    request.session.fav_color = POST["color"]; 
+    response.send("Fav color is" + request.session.fav_color);
+});
+
+app.get("/login", function (request, response) {
+    // Give a simple login form
+    if (typeof request.session['last_login'] != "undefined") {
+        login_time = "Last login was " + request.session["last_login"];
+    } else {
+        login_time = "First login";
+    }
+    my_cookie_name = request.cookies["username"];
+    str = `<body>
+Last login: ${login_time} by ${my_cookie_name};
+<form action="/login" method="POST">
+<input type="text" name="username" size="40" placeholder="enter username" ><br />
+<input type="password" name="password" size="40" placeholder="enter password"><br />
+<input type="submit" value="Submit" id="submit">
+</form>
+</body>
+    `;
+    response.send(str);
+});
+
+
+
+app.post("/login", function (request, response) {
+    // Process login form POST and redirect to logged in page if ok, back to login page if not
+    console.log("Got a POST to login");
+    POST = request.body;
+
+    user_name = POST["username"];
+    user_pass = POST["password"];
+    console.log("User name=" + user_name + " password=" + user_pass);
+    if (user_data[user_name] != undefined) {
+        if (user_data[user_name].password == user_pass) {
+            // Good login
+            request.session['last_login'] = Date(); //access session 
+            response.cookie("username", user_name, {"maxAge": 10 * 1000});
+            response.send("hi");
+        } else {
+            // Bad login, redirect
+            response.send("Sorry bud");
+        }
+    } else {
+        // Bad username
+        response.send("Bad username");
+    }
+
+});
+
+app.get("/register", function (request, response) {
+    // Give a simple register form
+    str = `<body>
+<form action="/register" method="POST">`;
+    if (request.query["name_err"] == undefined) {
+        str += `<input type="text" name="username" size="40" placeholder="enter username" ><br>`;
+    } else {
+        str += `<input type="text" name="username" size="40" placeholder="${request.query['name_err']}">User already exists<br>`;
+    }
+
+    str += `<input type="password" name="password" size="40" placeholder="enter password"><br>
+<input type="password" name="repeat_password" size="40" placeholder="enter password again"><br>
+<input type="email" name="email" size="40" placeholder="enter email"><br>
+<input type="submit" value="Submit" id="submit">
+</form> 
+</body>
+    `;
+    response.send(str);
+});
+
+app.post("/register", function (request, response) {
+    // process a simple register form
+    console.log("Got a POST to register");
+    POST = request.body;
+
+    user_name = POST["username"];
+    user_pass = POST["password"];
+    user_email = POST["email"];
+    user_pass2 = POST["repeat_password"];
+    query_response = "";
+
+    if (user_data[user_name] == undefined) {
+        console.log("Adding user: " + user_name);
+
+        user_data[user_name] = {};
+        user_data[user_name].name = user_name;
+        user_data[user_name].password = user_pass;
+        user_data[user_name].email = user_email;
+
+        data = JSON.stringify(user_data);
+        fs.writeFileSync(filename, data, "utf-8");
+
+        response.redirect("login");
+    } else {
+        query_response += "name_err=" + user_name;
+        console.log("Bad request to add user: " + user_name);
+        response.redirect("register" + "?" + query_response);
+    }
+});
+
+app.listen(8080, () => console.log(`listening on port 8080`));
