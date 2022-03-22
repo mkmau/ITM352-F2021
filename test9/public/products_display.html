@@ -1,0 +1,82 @@
+<script
+    src = "./products.js" ; type = "text/javascript">
+</script>
+
+<script>
+function isNonNegativeInteger(q, return_errors = false) { //this function checks if values are postitive, integer, whole values 
+        errors = []; // assume no errors at first
+        if (q == '') q = 0; //sets blank inputs to the quantitiy of 0 
+        if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+        else if (q <= 0) errors.push('<font color="red">Please enter a positive value</font>'); // Check if the string is non-negative
+        else if (parseInt(q) != q) errors.push('<font color="red">Not a full value!</font>'); // Check that it is an integer
+        return return_errors ? errors : (errors.length == 0);
+    }
+function checkQuantityTextbox(theTextbox) {
+        errs = isNonNegativeInteger(theTextbox.value, true);
+        if (errs.length == 0) errs = ['You want:']; //changes it to say you want ___
+        if (theTextbox.value.trim() == '') errs = ['Quantity'];
+        document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", ");
+    }
+  </script>
+
+<!--Creating homepage of website-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--from WODs linking sheet to basic stylesheet from CSS-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just a small CD Store</title>
+    <link rel="stylesheet" href="./stylesheets/navbar.css">
+    <link rel="stylesheet" href="./stylesheets/products-style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Oswald">
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Oswald', 'Sans';
+            color: rgb(0, 0, 0);
+        }
+    </style>
+</head>
+<body>
+  <!--from WODs creating navbar-->
+    <div id="navbar">
+        <ul>
+        <li><a href="./index.html"</a>Home Page</a></li>
+        <li><a class="active" href="./products_display.html"</a>CDs Galore</a></li>
+        </ul>
+        </div> 
+        <form name="invoice" action="/process_form" method="POST">  
+     <!--<form name="completed_purchase" action="./completed_purchase.html" method="POST"> -->
+    <div>
+        <main>
+            <script>
+
+            //from Professor Daniel Port
+            // this for loop displays the products array (from product.js)
+                for (i=0; i < products.length; i++) {
+            document.write(`<section class="item">
+                <h2>${products[i].name}</h2>
+                <h3>${products[i].quantity_available} in stock now.</h3>
+                <p>$${products[i].price}</p>
+                <label id="quantity${i}_label"}">Quantity</label>
+                    <input type="text" placeholder="0" name="quantity${i}" onkeyup="checkQuantityTextbox(this);"> 
+                <img src=${products[i].image} class="center">
+    
+            </section>`);
+        }
+        
+            </script>
+        </main>
+    </div>
+    <!--creation of Purchase button that sends user to invoice page-->
+    <footer>
+        <input type="submit" value="Purchase!" name="submitPurchase">
+
+    </footer>
+</form>
+
+</body>
+</html>
