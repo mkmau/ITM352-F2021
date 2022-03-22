@@ -9,7 +9,7 @@ var data = require('./public/products.js');
 var products = data.products;
 
 products.forEach((prod, i) => { prod.inventory = 10; });
-var querystring = require('querystring'); //read variable 'queryString' as the loaded query-string module
+var querystring = require('query-string'); //read variable 'queryString' as the loaded query-string module
 
 var temp_qty_data = {}; // change variable name later
 
