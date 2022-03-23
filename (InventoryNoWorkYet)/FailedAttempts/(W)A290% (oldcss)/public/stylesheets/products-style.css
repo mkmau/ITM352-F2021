@@ -1,0 +1,29 @@
+img {
+    width: 300px;
+    height: 300px;
+}
+/* basic design of products page with border */
+div {
+    column-count: inherit;
+    column-gap: 20px;
+    column-rule-style: solid;
+    column-rule-color: lightseagreen;
+    column-rule-width: 4px;
+    padding: 2em; 
+    border-style: solid;
+    border-color:  lightseagreen;
+    margin-top: 0px;
+    text-align: center;
+}
+#col h2 {
+    display: inline;
+    vertical-align: top;
+}
+main {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+} 
+p {
+    text-align: center;
+}
