@@ -9,7 +9,7 @@ var app = express(); //set module to variable 'app'
 
 var myParser = require("body-parser"); //load and cache body parser module - Lab13
 
-app.all('*', function (request, response, next) { //for all request methods...
+app.all('*', function (request, response, next) { //method for all paths
     console.log(request.method + ' to ' + request.path); //write in the console the request method and its path
     next(); //move on
 });
@@ -53,7 +53,7 @@ app.post("/process_form", function (request, response, next) {
         }
     }
 
-        // Querystring based on POST request.
+        // Querystring based on POST request. - help from Josh lorica on how to subtract products selected from the quantity_available
         QString = querystring.stringify(POST);
         if (JSON.stringify(errors) === '{}') {
             // Remove quantity for amount of products i purchased.
