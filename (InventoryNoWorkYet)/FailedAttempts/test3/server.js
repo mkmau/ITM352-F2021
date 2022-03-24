@@ -7,6 +7,7 @@ var express = require('express');
 var app = express();
 var myParser = require("body-parser");
 
+
 // requires user_data.json file for user information, taken from Lab 14
 var fs = require('fs');
 var filename = './user_data.json';
@@ -49,6 +50,7 @@ function isNonNegInt(q, return_errors = false) {
     if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
     return return_errors ? errors : (errors.length == 0);
 }
+
 
 // Adopted from Lab 13 Exercise 3.
 app.use(express.urlencoded({ extended: true }));

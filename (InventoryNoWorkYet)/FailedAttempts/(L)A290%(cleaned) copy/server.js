@@ -34,6 +34,7 @@ function isNonNegativeInteger(q, return_errors = false) {
 }
 
 app.use(myParser.urlencoded({ extended: true })); //get data in the body
+
 if (fs.existsSync(filename)) { 
     var data = fs.readFileSync(filename, 'utf-8'); // if it exists, read the file user_data.json storedin filename
     var user_data = JSON.parse(data); // parse user data
@@ -128,10 +129,7 @@ app.post("/process_register", function (request, response) {
         temp_qty_data['email'] = user_data[username]["email"];
         let params = new URLSearchParams(temp_qty_data);
         response.redirect('./invoice.html?' + params.toString()); // go to invoice at the end of a successful registration process
-    }
-
-    // Otherwise back to registration with the registration errors.    
-    else {
+    }   else {
         request.body['reg_errors'] = JSON.stringify(reg_errors);
         let params = new URLSearchParams(request.body);
         response.redirect('register.html?' + params.toString()); // redirect to signup page after errors popup --> CHANGED TO REGISTER.HTML
