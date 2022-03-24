@@ -129,7 +129,7 @@ app.post("/process_register", function (request, response) {
         login_info['username'] = username;
         login_info['email'] = user_data[username]["email"];
         let params = new URLSearchParams(login_info);
-        response.redirect('./products_display.html?' + params.toString()); // go to invoice at the end of a successful registration process
+        response.redirect('./login.html?' + params.toString()); // go to invoice at the end of a successful registration process
     }  else { // send user back to registration page if there are any errors
         request.body['reg_errors'] = JSON.stringify(reg_errors);
         let params = new URLSearchParams(request.body);
