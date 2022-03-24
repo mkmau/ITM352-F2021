@@ -2,7 +2,7 @@
 var data = require('./public/products.js'); //requiring the products page from the public folder and assigning the action to 'data'
 var products = data.products; //taking the data from the products page and assigning it to products
 
-var querystring = require('query-string'); //read variable 'queryString' as the loaded query-string module
+var querystring = require('querystring'); //read variable 'queryString' as the loaded query-string module
 
 var express = require('express'); //requiring express package 
 var app = express(); //set module to variable 'app'
@@ -13,7 +13,7 @@ var myParser = require("body-parser"); //load and cache body parser module - Lab
 var fs = require('fs');
 var filename = './user_data.json';
 
-var login_info = {}; // change variable name later
+var login_info = {}; 
 
 app.all('*', function (request, response, next) { //method for all paths
     console.log(request.method + ' to ' + request.path); //write in the console the request method and its path
