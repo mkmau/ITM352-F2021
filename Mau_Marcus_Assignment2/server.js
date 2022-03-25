@@ -7,7 +7,6 @@ var querystring = require('querystring'); //read variable 'queryString' as the l
 var express = require('express'); //requiring express package 
 var app = express(); //set module to variable 'app'
 
-
 var myParser = require("body-parser"); //load and cache body parser module - Lab13
 
 var fs = require('fs');
