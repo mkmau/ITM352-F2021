@@ -20,6 +20,7 @@ Description: This is the home page of the store.
   /* Body styling */
   body, h3 {
     font-family: 'oswald', sans;
+    font-size: xx-large;
   }
 
   body {
@@ -83,12 +84,15 @@ Description: This is the home page of the store.
     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
     </div>
 
-   
-    <div class="w3-container w3-padding-32 w3-center">
-      <img src="images/CD.jpg" width="900" height="507">
-      <br> <input type="button" class="button" value="Click to Login" onclick="window.location.href = 'login.html';" <br>
+
+
+    <!--From stack overflow on how to make an image clickable: https://stackoverflow.com/questions/16131988/making-an-image-act-like-a-button-->
+    <div class="w3-container w3-padding-32 w3-center"> 
+    <br>Welcome to the store! Click the image below to get started!</br>
+    <a href="login.html">
+    <img src="/images/cd.jpg" width="900" height="507" alt="another image" title="The title of the new image" class="no-border"/>
+    </a>
     </div>
-  
 
     <script>
       // Script to open and close sidebar
