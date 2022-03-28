@@ -3,46 +3,41 @@ Author: Marcus Mau
 References: Assignment 3 Code Examples (https://dport96.github.io/ITM352/morea/180.Assignment3/reading-code-examples.html), Lab 15, & Nicholas Samson's code
 Description: This is the Javascript file that runs the server for my store and contains instructions for specific requests.
 */
-var data = require('./public/products.js'); //requiring the products page from the public folder and assigning the action to 'data'
-var products = data.products; //taking the data from the products page and assigning it to products
+//require a file which is used to get our product data
+var data = require('./public/products.js'); 
+var products = data.products; 
 
+//require express which is the basis for our sever
 var express = require('express');
 var app = express();
 
+//require body parser which is necessary for data to be read by js
 var myParser = require("body-parser");
 
-// Requires user_data.json file for user information, taken from Lab 14
+// taken from cookies lab and assignment 2 on how to use FS to read and edit files
 var fs = require('fs');
 var filename = './user_data.json';
 
-// Requires querystring when converting products quantity object into a string array during login processing
+// requiring query-string which will be used to turn products into an array when completing purchase
 var queryString = require('query-string');
 const qs = require('qs');
 
-// Loads up cookie parser
+// requiring cookie parser which will be called later
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-// Loads up session
+// requiring express session which allows for sessions
 var session = require('express-session');
 
-// Requires nodemailer for sending the invoice to the customer's email
+// requiring nodemailer which will be called later to email invoice
 var nodemailer = require('nodemailer');
 const { exit } = require('process');
-
-// ROUTING
 
 // Monitor all requests
 app.all('*', function (request, response, next) { //method for all paths
     console.log(request.method + ' to ' + request.path); //write in the console the request method and its path
     next(); //move on
 });
-
-
-
-
-
-
 
 
 
@@ -56,14 +51,7 @@ app.get('/set_cookie', function (request, response, next) {
 
 
 
-
-
-
-
-
-
-
-// Use cookie
+// From lab 15 on cookies - setting cookie
 app.get('/use_cookie', function (request, response, next) {
     if (typeof request.cookies['username'] != 'undefined') { // If cookie associated with username isn't undefined,
         response.send(`Hello ${request.cookies['username']}!`) // Send response greeting customer by username
@@ -75,9 +63,7 @@ app.get('/use_cookie', function (request, response, next) {
 
 
 
-
-
-// Session settings
+// Help from Josh Lorica, Justin Sakamoto to complete encryption
 app.use(session({
     secret: "TXkgZmF2b3JpdGUgZnJhZ3JhbmNlIGlzIE9jZWFuIGJ5IEdpb3JnaW8gQXJtYW5pIQ==", // Encrypt the session for security (read https://stackoverflow.com/questions/18565512/importance-of-session-secret-key-in-express-web-framework)
     resave: true, // Enabled so that when a session wasn't changed during a request, it is still updated in the store (thereby marking it active) (read https://stackoverflow.com/questions/40381401/when-to-use-saveuninitialized-and-resave-in-express-session)
@@ -88,13 +74,7 @@ app.use(session({
 
 
 
-
-
-
-
-
-
-// Loads file service. Taken from Assignment 2
+// Assignment 2 where user_data was looked for, then the information was read and parsed
 if (fs.existsSync(filename)) {
     var stats = fs.statSync(filename);
     var data = fs.readFileSync(filename, 'utf-8');
@@ -105,12 +85,7 @@ if (fs.existsSync(filename)) {
 
 
 
-
-
-
-
-
-// Checks for the existence of the file, from Lab 14
+// Checking to make sure user_data exists
 if (fs.existsSync(filename)) {
     var data = fs.statSync(filename);
     data = fs.readFileSync(filename, 'utf-8'); // If it exists, read the file user_data.json storedin filename
@@ -119,11 +94,6 @@ if (fs.existsSync(filename)) {
     console.log(`${user_data} does not exist!`) // If it doesn't exist, send a message to console
     exit();
 }
-
-
-
-
-
 
 
 
@@ -137,7 +107,7 @@ function isNonNegativeInteger(q, return_errors = false) { //Is non negative inte
 }
 
 
-// Adopted from Lab 13 Exercise 3.
+// Taken from Assignment 1 to use myParser
 app.use(myParser.urlencoded({ extended: true }));
 app.use(myParser.json());// Use JSON parser to parse data
 
@@ -178,7 +148,7 @@ app.post("/process_form", function (request, response) {
     }
 });
 
-// Add to shopping cart 
+// Add to shopping cart - help from Josh Lorica, Justin Sakamoto and example code taken from Alyssa Mencel
 app.post("/addtocart", function (request, response) {
     console.log(request.body); // Shows request body in console
     itemdata = request.body;// Sets the itemdata variable to the request body
@@ -219,7 +189,8 @@ app.get("/logout", function (request, response) {
     request.session.destroy(); // Destroy the session containing the cart info and cookies
 });
 
-// Process login
+// Process login 
+//help from Josh Lorica and Justin Sakamoto with code examples from Justin Sakamoto
 app.post("/process_login", function (request, response) {
     var loginError = []; // Assume no login errors at first. Add all errors into this array
     var ClientUsername = request.body.username.toLowerCase(); // Put the username in lowercase and check against user_data.json file 
@@ -229,7 +200,7 @@ app.post("/process_login", function (request, response) {
             request.query.username = ClientUsername;
             request.query.name = user_data[request.query.username].name
             response.cookie('username', ClientUsername); // Send cookie associated with username to session
-            response.redirect('./products_display.html?pkey=Seventies');// If successful login, edirect to store
+            response.redirect('./products_display.html?productkey=Seventies');// If successful login, edirect to store
             return;
         } else { // If username or password is wrong, display a message containing the specific errors
             request.query.username = ClientUsername; // Sets the username to the username inputted by customer
@@ -250,13 +221,13 @@ app.post("/process_register", function (request, response) {
 
     // Registration validation (each validation adopted from https://www.w3resource.com/javascript/form/javascript-sample-registration-form-validation.php)
     
-    // EMAIL VALIDATION
+    // email validation
     if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(POST['email'])) { // Check if the email is in the correct format
     } else {
         errors.push("Invalid email."); // Error message for email that doesn't match format of name@website.domain
     }
 
-    // NAME VALIDATION
+    // name validation
     if (/^[A-Za-z, ]+$/.test(POST['fullname'])) { // Name must contain only letters
     } else {
         errors.push('Enter a name with alphabet characters only.'); // Error message if name contains numbers or invalid characters/symbols
@@ -265,7 +236,7 @@ app.post("/process_register", function (request, response) {
         errors.push("Name must be less than 30 characters."); // Error message if name exceeds 30 characters or nothing in there
     }
 
-    // USERNAME VALIDATION
+    // username validation
     // Alphanumeric check taken from https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
     if (/^[0-9a-z]+$/.test(POST['username'])) { // Username must contain only letters and/or numbers
     } else {
@@ -276,15 +247,15 @@ app.post("/process_register", function (request, response) {
     }
     var reguser = POST['username'].toLowerCase(); // Username must be unique
     if (typeof user_data[reguser] != 'undefined') { // Check against all usernames existing in database
-        errors.push('This username is already taken.'); // ERror message if username is non-unique
+        errors.push('This username is already taken.'); // Error message if username is non-unique
     }
 
-    // PASSWORD VALIDATION
+    // password validation
     if (POST['password'].length < 6) { // Password must be at least 6 characters
         errors.push('Password must be more than 6 characters.'); // Error message if password doesn't exceed 6 characters
     }
 
-    //CONFIRM PASSWORD VALIDATION
+    //passsword confirmation
     if (POST['password'] == POST['confirmpassword']) { // Password must match what is entered in Confirm Password box
     } else {
         errors.push('Passwords do not match.'); // Error message if passwords don't match
@@ -303,7 +274,7 @@ app.post("/process_register", function (request, response) {
         ClientUsername = user_data[username]['name'];
         ClientEmail = user_data[username]['email'];
         response.cookie("username", ClientUsername).send; // Send cookie associated with username to server
-        response.redirect('./products_display.html?pkey=Seventies'); // Redirect to Seventies page so customer can start shopping
+        response.redirect('./products_display.html?productkey=Seventies'); // Redirect to Seventies page so customer can start shopping
     }
     else {
         request.query.errors = errors.join(' '); // Join the errors in registration with a space
@@ -311,16 +282,17 @@ app.post("/process_register", function (request, response) {
     }
 });
 
-// Process checkout. Modified from Assignment 3 Code Examples (https://dport96.github.io/ITM352/morea/180.Assignment3/reading-code-examples.html)
+// Completing the and processing the purchase and sending invoice
+// Taken from Professor ports's code examples: https://dport96.github.io/ITM352/morea/180.Assignment3/reading-code-examples.html
 app.post("/checkout", function (request, response) {
     var invoice_str = `Thank you for your order!<table>`; // Creates invoice that will be sent to email
     var shopping_cart = request.session.cart; // Set shopping cart as the cart requested from the session
-    for (pkey in products) {
-        for (i = 0; i < products[pkey].length; i++) {
-            if (typeof shopping_cart[pkey] == 'undefined') continue;
-            qty = shopping_cart[pkey][i];
+    for (productkey in products) {
+        for (i = 0; i < products[productkey].length; i++) {
+            if (typeof shopping_cart[productkey] == 'undefined') continue;
+            qty = shopping_cart[productkey][i];
             if (qty > 0) {
-                invoice_str += `<tr><td>${qty}</td><td>${products[pkey][i].brand}</td><tr>`;
+                invoice_str += `<tr><td>${qty}</td><td>${products[productkey][i].brand}</td><tr>`;
             }
         }
     }
@@ -329,7 +301,6 @@ app.post("/checkout", function (request, response) {
     // Decodes the invoice that was encoded
     invoice_str = decodeURI(request.body.invoicestring);
     var transporter = nodemailer.createTransport({
-        // Because we are using UH as the host, we must be using their network for the email to work
         host: "mail.hawaii.edu",
         port: 25,
         secure: false,
@@ -339,18 +310,19 @@ app.post("/checkout", function (request, response) {
     });
 
     // Info of sender
-    var user_email = 'noreply@SkyCD.com';
+    var store_email = 'noreply@SkyCD.com';
     var mailOptions = {
-        from: 'SkyCD',
-        to: user_email,
+        from: 'SkyCD@store.com',
+        to: store_email,
         subject: 'Your Order from SkyCD!',
         html: invoice_str
     };
 
+    // using the mailOptions to send invoice
     transporter.sendMail(mailOptions, function (error, info) {
-        if (error) { // If there are errors in sending invoice (e.g., due to network issue), display error message below invoice
-            invoice_str += `<p>There was an error and your invoice was not sent!</p> <p>Return to <a href="/index.html">homepage</p>`;
-        } else { // Otherwise, show that the email was sent successfully
+        if (error) { // If there are errors then this message will be sent
+            invoice_str += '<p>There was an error and your invoice could not be emailed</p> <p>Return to <a href="/index.html">homepage</p>';
+        } else { // If there are no errors then this message will be sent
             invoice_str += '<p>The invoice was sent to your email. Your CDs will be at your doorstep in one week!</p> <p>Return to <a href="/index.html">homepage</p>';
         }
         request.session.destroy(); // Destroys session after checkout

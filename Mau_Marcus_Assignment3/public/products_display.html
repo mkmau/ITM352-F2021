@@ -59,7 +59,7 @@ body {
 <script>
   var products_array = "products.js"
   let params = (new URL(document.location)).searchParams; // Gets form submission data inside params.
-  var producttype = params.get("pkey"); // Assigns product key to params so we will be able to reference everything in the products js to this key for easy use
+  var producttype = params.get("productkey"); // Assigns product key to params so we will be able to reference everything in the products js to this key for easy use
 
   // Function that deals with reloading or redirecting page.
   // Initializes our cart and productdata so we won't have an undefined variable
@@ -84,9 +84,9 @@ body {
   function isNonNegativeInteger(q, return_errors = false) {
     errors = []; // Assume no errors at first
     if (q == '') q = 0; // Blank quantities = 0
-    if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
-    else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
-    else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+    if (Number(q) != q) errors.push('<font color="red">Please enter a number</font>'); // Check if string is a number value
+    else if (q <= 0) errors.push('<font color="red">Please enter a positive value</font>'); // Check if it is non-negative
+    else if (parseInt(q) != q) errors.push('<font color="red">Please enter a whole value</font>'); // Check that it is an integer
     return return_errors ? errors : (errors.length == 0);
   }
 
@@ -169,8 +169,8 @@ body {
       style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
       <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button">Close Menu</a>
       <script>
-        for (let ptype in products) {
-          document.write(`<a href="./products_display.html?pkey=${ptype}" onclick="w3_close()" class="w3-bar-item w3-button">${ptype}</a>`)
+        for (let producttype in products) {
+          document.write(`<a href="./products_display.html?productkey=${producttype}" onclick="w3_close()" class="w3-bar-item w3-button">${producttype}</a>`)
         }
       </script>
       <a href="cart.html" onclick="w3_close()" class="w3-bar-item w3-button">Shopping Cart</a>

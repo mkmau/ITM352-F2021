@@ -7,88 +7,88 @@ All product information, including the brand, price, and image location are cont
 var Seventies = [ 
     {
         "brand" : "Out of the Blue - Electric Light Orchaestra",
-        "price" : 135.00,
+        "price" : 4.99,
         "image" : "./images/elo.jpg"
     },
     {
         "brand" : "Night Music - Cecelio and Kapono",
-        "price" : 138.00,
+        "price" : 5.99,
         "image" : "./images/candk.jpg"
     },
     {
         "brand" : "Madman Across the Water - Elton John",
-        "price" : 138.00,
+        "price" : 6.99,
         "image" : "./images/elton.jpg"
     }, 
     {
         "brand" : "The Stranger - Billy Joel",
-        "price" : 138.00,
+        "price" : 7.99,
         "image" : "./images/joel.jpg"
     }
 ]
 var Eighties = [
     {
         "brand" : "Play Deep - The Oufield",
-        "price" : 115.00,
+        "price" : 4.95,
         "image" : "./images/outfield.jpg"
     },
     {
         "brand" : "Private Eyes - Hall and Oates",
-        "price" : 170.00,
+        "price" : 5.95,
         "image" : "./images/hando.jpg"
     },
     {
         "brand" : "Toto IV - Toto",
-        "price" : 138.00,
+        "price" : 6.95,
         "image" : "./images/toto.jpg"
     },
     {
         "brand" : "Whitesnake - Whitesnake",
-        "price" : 199.00,
+        "price" : 7.95,
         "image" : "./images/whitesnake.jpg"
     }
 ]
 var Nineties = [
     {
         "brand" : "The Predator - Ice Cube",
-        "price" : 138.00,
+        "price" : 6.99,
         "image" : "./images/icecube.jpg"
     },
     {
         "brand" : "Poi dog with Crabs - Rap Replinger",
-        "price" : 138.00,
+        "price" : 7.99,
         "image" : "./images/poidog.jpg"
     },
     {
         "brand" : "Dookie - Greenday",
-        "price" : 110.00,
+        "price" : 7.99,
         "image" : "./images/greenday.jpg"
     },
     {
         "brand" : "The Fourth World - Kara's Flowers",
-        "price" : 135.00,
+        "price" : 8.99,
         "image" : "./images/flowers.jpg"
     },
 ]   
 var Two_Thousands = [
     {
         "brand" : "Last Stop Suburbia - Allister",
-        "price" : 162.00,
+        "price" : 10.95,
         "image" : "./images/allister.jpg"
     },
     {
         "brand" : "Hot Fuss - The Killers",
-        "price" : 140.00,
+        "price" : 10.95,
         "image" : "./images/hotfuss.jpg"
     },
     {
         "brand" : "No Pads, No Helmets - Simple Plan",
-        "price" : 170.00,
+        "price" : 10.95,
         "image" : "./images/simpleplan.jpg"
     },
     {
         "brand" : "The All-American Rejects - The All American Rejects",
-        "price" : 128.00,
+        "price" : 10.95,
         "image" : "./images/taar.jpg"
     }
 ]

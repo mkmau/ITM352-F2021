@@ -21,6 +21,8 @@ Description: This is the page that shows what items and how many quantities are 
   /* Body styling */
   body {
     font-family: 'oswald', sans;
+    padding-left: 60px;
+    padding-right: 20px;
   }
 
   h3 {
@@ -121,7 +123,7 @@ Description: This is the page that shows what items and how many quantities are 
   console.log(cart_data); // Show in console
 </script>
 
-<body>
+<head>
   <!-- SIDEBAR -->
   <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left"
     style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
@@ -129,14 +131,15 @@ Description: This is the page that shows what items and how many quantities are 
 
     <!-- Writes products to the nav bar using the product key assigned above -->
     <script>
-      for (let ptype in products) {
-        document.write(`<a href="./products_display.html?pkey=${ptype}" onclick="w3_close()" class="w3-bar-item w3-button">${ptype}</a>`)
+      for (let producttype in products) {
+        document.write(`<a href="./products_display.html?productkey=${producttype}" onclick="w3_close()" class="w3-bar-item w3-button">${producttype}</a>`)
       }
     </script>
 
     <!-- Writes navigation to the navbar -->
     <a href="http://localhost:8080/Cart.html" onclick="w3_close()" class="w3-bar-item w3-button">Shopping Cart</a>
   </nav>
+
 
   <!-- TOP HANDLE -->
   <div class="w3-top">
@@ -146,7 +149,9 @@ Description: This is the page that shows what items and how many quantities are 
       <div class="w3-center w3-padding-16">Shopping Cart</div>
     </div>
   </div>
+</head>
 
+  <body>  
   <!-- Writes the invoice to one variable to encode and pass to the server -->
   <div class="b">
     <div class="b">
@@ -159,19 +164,19 @@ Description: This is the page that shows what items and how many quantities are 
       `;
 
       subtotal = 0;
-      for (let ptype in cart_data) {
-        for (let i in cart_data[ptype]) {
-          let qty = cart_data[ptype][i];
+      for (let producttype in cart_data) {
+        for (let i in cart_data[producttype]) {
+          let qty = cart_data[producttype][i];
           if (qty > 0) {
-            var extended_price = qty * products[ptype][i].price;
+            var extended_price = qty * products[producttype][i].price;
             subtotal = extended_price + subtotal;
             invoicestr += `
             <tr>
-              <td width="50%"><img src="${products[ptype][i].image}" style=width="200" height="200"></td>
+              <td width="50%"><img src="${products[producttype][i].image}" style=width="200" height="200"></td>
               <td width="50%">
-                <b>${products[ptype][i].brand}</b>
+                <b>${products[producttype][i].brand}</b>
                 <p>Quantity: ${qty}</p>
-                <p>Price for each: $${products[ptype][i].price}</p>
+                <p>Price for each: $${products[producttype][i].price}</p>
                 <p>Total price: $${extended_price}</p>
               </td>
             </tr>
@@ -185,11 +190,11 @@ Description: This is the page that shows what items and how many quantities are 
       var tax = tax_rate * subtotal;
 
       // Compute shipping
-      if (subtotal <= 149.99) {
-        shipping = 10;
-      } else if (150 < subtotal <= 249.99) {
-        shipping = 5;
-      } if (subtotal > 250) {
+      if (subtotal <= 14.99) {
+        shipping = 3;
+      } else if (15 < subtotal <= 24.99) {
+        shipping = 1;
+      } if (subtotal > 25) {
         shipping = 0;
       }
 
@@ -208,7 +213,7 @@ Description: This is the page that shows what items and how many quantities are 
 
       invoicestr += `
             <tr>
-              <td style="text-align: center;" colspan="4" width="100%">Subtotal: $${subtotal}</td>
+              <td style="text-align: center;" colspan="4" width="100%">Subtotal: $${subtotal.toFixed(2)}</td>
             </tr>
             <tr>
               <td style="text-align: center;" colspan="4" width="100%">Tax (${100 * tax_rate}%)</span>: $${tax.toFixed(2)}</td>
@@ -225,10 +230,78 @@ Description: This is the page that shows what items and how many quantities are 
           </div>
         </div>
         `;
+        
       // Finally writes to the invoicestr variable
       document.write(invoicestr);
     </script>
   </div>
+</body>
+  <body>
+  <!--Using Checkout Form Template from w3schools.com-->
+  <br>
+  <div class="col-75">
+    <div class="container">
+      <form name="complete_purchase" action="./complete.html" method="GET">
+        <div class="row">
+          <div class="col-50">
+            <h3>Billing Address</h3>
+            <br><label for="fname"><i class="fa fa-user"></i> Full Name</label></br>
+            <input type="text" id="fname" name="firstname" placeholder="John M. Doe">
+            <br><label for="email"><i class="fa fa-envelope"></i> Email</label></br>
+            <input type="text" id="email" name="email" placeholder="john@example.com">
+            <br><label for="adr"><i class="fa fa-address-card-o"></i> Address</label></br>
+            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street">
+            <br><label for="city"><i class="fa fa-institution"></i> City</label></br>
+            <input type="text" id="city" name="city" placeholder="New York">
+
+            <div class="row">
+              <div class="col-50">
+                <br><label for="state">State</label></br>
+                <input type="text" id="state" name="state" placeholder="NY">
+              </div>
+              <div class="col-50">
+                <br><label for="zip">Zip</label></br>
+                <input type="text" id="zip" name="zip" placeholder="10001">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-50">
+            <h3>Payment</h3>
+            <br><label for="fname">Accepted Cards</label></br>
+            <div class="icon-container">
+              <i class="fa fa-cc-visa" style="color:navy;"></i>
+              <i class="fa fa-cc-amex" style="color:blue;"></i>
+              <i class="fa fa-cc-mastercard" style="color:red;"></i>
+              <i class="fa fa-cc-discover" style="color:orange;"></i>
+            </div>
+            <br><label for="cname">Name on Card</label></br>
+            <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+            <br><label for="ccnum">Credit card number</label></br>
+            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+            <br><label for="expmonth">Exp Month</label></br>
+            <input type="text" id="expmonth" name="expmonth" placeholder="September">
+
+            <div class="row">
+              <div class="col-50">
+                <br><label for="expyear">Exp Year</label></br>
+                <input type="text" id="expyear" name="expyear" placeholder="2018">
+              </div>
+              <div class="col-50">
+                <br><label for="cvv">CVV</label></br>
+                <input type="text" id="cvv" name="cvv" placeholder="352">
+              </div>
+            </div>
+          </div>
+        </div>
+        <br> <label><input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing </label> </br>
+        <!--added this button to redirect to a final page that thanks user for there purchase-->
+
+      </form>
+    </div>
+  </div>
+</br>
+</body>
 
   <!-- Posts the variable "invoicestr" with the invoice stored then encodes it and sends to server -->
   <form action="/checkout" method=POST>
@@ -237,7 +310,6 @@ Description: This is the page that shows what items and how many quantities are 
     </script>
     <p><button type="submit" id="checkout" name="purchase_submit">CHECKOUT</button></p>
   </form>
-</body>
 
 <script>
   // Script to open and close sidebar
